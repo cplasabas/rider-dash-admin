@@ -1,0 +1,48 @@
+{
+  "name": "rider-dash-admin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "apollo-boost": "^0.1.23",
+    "apollo-cache-inmemory": "^1.3.12",
+    "apollo-link-context": "^1.0.12",
+    "apollo-link-http": "^1.5.9",
+    "apollo-link-ws": "^1.0.14",
+    "core-js": "^2.6.5",
+    "graphql": "^14.0.2",
+    "lodash.truncate": "^4.4.2",
+    "nprogress": "^0.2.0",
+    "register-service-worker": "^1.6.2",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "subscriptions-transport-ws": "^0.9.15",
+    "vue": "^2.6.10",
+    "vue-apollo": "^3.0.0-beta.26",
+    "vue-currency-filter": "^2.3.0",
+    "vue-moment": "^4.0.0",
+    "vue-perfect-scrollbar": "^0.1.0",
+    "vue-resize": "^0.4.4",
+    "vue-router": "^3.0.3",
+    "vuetify": "^1.5.14",
+    "vuex": "^3.0.1",
+    "vuex-persistedstate": "^2.5.4"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-plugin-pwa": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.6.10"
+  }
+}
