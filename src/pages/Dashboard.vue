@@ -71,24 +71,34 @@
             <v-layout row wrap>
               <v-flex
                 class="subheading font-weight-bold"
-                md12
-                sm12
+                md6
+                sm6
                 my-2
                 text-capitalize
               >
                 {{ order.contact_name }}
               </v-flex>
+              <v-flex
+                class="title text-xs-right primary--text font-weight-bold"
+                md6
+                sm6
+                my-2
+                text-capitalize
+              >
+                {{ order.service_fee | currency}}
+              </v-flex>
             </v-layout>
-            <v-layout row wrap my-1 text-capitalize>
+            
+            <v-layout v-for="(location, key) in order.locations" :key="location.id" row wrap my-1 text-capitalize>
               <v-flex md12 sm12>
-                <span class="font-weight-bold">Store:</span>
-                {{ order.store_name }}
+                <v-icon color="primary" v-if="key === order.locations.length-1">location_on</v-icon>
+                <v-icon color="primary" v-else>donut_large</v-icon>
+                  {{ location.address }}
               </v-flex>
             </v-layout>
             <v-layout row wrap my-1 text-capitalize>
-              <v-flex md12 sm12>
-                <span class="font-weight-bold">Order:</span>
-                {{ order.order }}
+              <v-flex md12 sm12 class="grey--text" my-2>
+                {{ order.notes }}
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -98,7 +108,7 @@
             v-show="order.status === 1"
           >
             <v-layout row wrap my-1 text-capitalize justify-end>
-              <v-flex class="text-xs-right" md4 sm4>
+              <v-flex class="text-xs-right" md3 sm3>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -113,7 +123,7 @@
                   <span>Reject Order</span>
                 </v-tooltip>
               </v-flex>
-              <v-flex class="text-xs-right" md4 sm4>
+              <v-flex class="text-xs-right" md3 sm3>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn

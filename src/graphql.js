@@ -18,8 +18,12 @@ export const ordersQuery = gql`
       }
       contact_name
       contact_phone
-      store_name
-      order
+      service_fee
+      notes
+      locations {
+        address
+        establishment
+      }
       createdAt
       status
     }
@@ -36,8 +40,13 @@ export const orderCreatedSubscription = gql`
       }
       contact_name
       contact_phone
-      store_name
-      order
+      service_fee
+      notes
+      locations {
+        id
+        address
+        establishment
+      }
       createdAt
       status
     }
