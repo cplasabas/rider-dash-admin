@@ -72,7 +72,7 @@ const httpLink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://api.riderdash.ph/graphql",
+  uri: "wss://api.riderdash.ph/graphql",
   // uri: "ws:localhost:8010/graphql",
   options: {
     reconnect: true,
