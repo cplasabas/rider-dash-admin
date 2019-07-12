@@ -2,8 +2,8 @@
   <v-container class="dashboard-container">
     <v-layout class="orders-container" row wrap>
       <v-flex
-        xs4
-        sm4
+        xs12
+        md4
         px-2
         py-2
         v-for="(order, key) in ongoingOrders"
@@ -19,34 +19,10 @@
                 <v-flex class="body-2" md7 sm7 text-xs-right>
                   <h3
                     class="secondary--text
+                    text-capitalize
                     text--lighten-1"
-                    v-if="order.status === 1"
                   >
-                    Pending
-                  </h3>
-                  <h3
-                    class="primary--text text--lighten-1"
-                    v-else-if="order.status === 2"
-                  >
-                    Accepted
-                  </h3>
-                  <h3
-                    class="primary--text text--lighten-1"
-                    v-else-if="order.status === 3"
-                  >
-                    Driving to Store
-                  </h3>
-                  <h3
-                    class="primary--text text--lighten-1"
-                    v-else-if="order.status === 4"
-                  >
-                    Waiting in Line
-                  </h3>
-                  <h3
-                    class="primary--text text--lighten-1"
-                    v-else-if="order.status === 5"
-                  >
-                    In Transit
+                    {{ order.status.name }}
                   </h3>
                 </v-flex>
               </v-layout>
@@ -60,7 +36,7 @@
                   text-capitalize"
                   md8
                   sm8
-                  v-show="order.status > 1"
+                  v-show="order.status_id > 1"
                 >
                   {{ order.rider.first_name }} {{ order.rider.last_name }}
                 </v-flex>
@@ -85,15 +61,26 @@
                 my-2
                 text-capitalize
               >
-                {{ order.service_fee | currency}}
+                {{ order.service_fee | currency }}
               </v-flex>
             </v-layout>
-            
-            <v-layout v-for="(location, key) in order.locations" :key="location.id" row wrap my-1 text-capitalize>
+            <v-layout
+              v-for="(location, key) in order.locations"
+              :key="location.id"
+              row
+              wrap
+              my-1
+              text-capitalize
+            >
               <v-flex md12 sm12>
-                <v-icon color="primary" v-if="key === order.locations.length-1">location_on</v-icon>
+                <v-icon
+                  color="primary"
+                  v-if="key === order.locations.length - 1"
+                >
+                  location_on
+                </v-icon>
                 <v-icon color="primary" v-else>donut_large</v-icon>
-                  {{ location.address }}
+                {{ location.address }}
               </v-flex>
             </v-layout>
             <v-layout row wrap my-1 text-capitalize>
@@ -105,7 +92,7 @@
           <v-card-actions
             v-on:click.stop
             class="secondary"
-            v-show="order.status === 1"
+            v-show="order.status.id === 1"
           >
             <v-layout row wrap my-1 text-capitalize justify-end>
               <v-flex class="text-xs-right" md3 sm3>
@@ -152,7 +139,7 @@
     >
       <VuePerfectScrollbar class="scroll-area">
         <v-layout class="non-clickable" row wrap justify-end>
-          <v-flex xs3 sm3 px-2 py-2 v-for="(rider, key) in riders" :key="key">
+          <v-flex md3 xs6 px-2 py-2 v-for="(rider, key) in riders" :key="key">
             <!-- eslint-disable -->
             <v-card
               class="rider-card"
@@ -177,35 +164,9 @@
                     >
                       <!-- eslint-disable -->
                       <h3
-                        class="primary--text text--lighten-1"
-                        v-if=" rider.current_order.status === 2"
+                        class="primary--text text-capitalize text--lighten-1"
                       >
-                        Accepted
-                      </h3>
-                      <!-- eslint-disable -->
-                      <h3
-                        class="primary--text text--lighten-1"
-                        v-else-if="
-                          
-                          rider.current_order.status === 3"
-                      >
-                        Driving to Store
-                      </h3>
-                      <!-- eslint-disable -->
-                      <h3
-                        class="primary--text text--lighten-1"
-                        v-else-if="
-                          
-                          rider.current_order.status === 4"
-                      >
-                        Waiting in Line
-                      </h3>
-                      <!-- eslint-disable -->
-                      <h3
-                        class="primary--text text--lighten-1"
-                        v-else-if=" rider.current_order.status === 5"
-                      >
-                        In Transit
+                        {{rider.current_order.status.name}}
                       </h3>
                     </v-flex>
                     <v-flex
@@ -395,8 +356,11 @@ export default {
       window.getApp.$emit("RIDER_PICK");
     },
     async pick_rider(rider_id) {
-      if (this.rider_pick && !this.loading) {
+      let rider = this.riders.find(r => r.id === rider_id);
+
+      if (!rider.current_order && this.rider_pick && !this.loading) {
         this.order.rider_id = rider_id;
+        this.order.status_id = 2;
         this.loading = true;
 
         await this.$apollo

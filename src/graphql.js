@@ -25,7 +25,11 @@ export const ordersQuery = gql`
         establishment
       }
       createdAt
-      status
+      status_id
+      status {
+        id
+        name
+      }
     }
   }
 `;
@@ -48,7 +52,11 @@ export const orderCreatedSubscription = gql`
         establishment
       }
       createdAt
-      status
+      status_id
+      status {
+        id
+        name
+      }
     }
   }
 `;
@@ -57,7 +65,10 @@ export const orderUpdatedSubscription = gql`
   subscription {
     orderUpdated {
       id
-      status
+      status {
+        id
+        name
+      }
       rider {
         first_name
         last_name
@@ -74,7 +85,10 @@ export const ridersQuery = gql`
       last_name
       current_order {
         id
-        status
+        status {
+          id
+          name
+        }
       }
     }
   }
@@ -83,7 +97,10 @@ export const ridersQuery = gql`
 export const riderAssignedSubscription = gql`
   subscription {
     riderAssigned {
-      status
+      status {
+        id
+        name
+      }
       id
       rider_id
     }
@@ -91,9 +108,12 @@ export const riderAssignedSubscription = gql`
 `;
 
 export const updateOrderMutation = gql`
-  mutation updateOrder($id: ID!, $rider_id: Int) {
-    updateOrder(id: $id, rider_id: $rider_id) {
-      status
+  mutation updateOrder($id: ID!, $rider_id: Int, $status_id: Int) {
+    updateOrder(id: $id, rider_id: $rider_id, status_id: $status_id) {
+      status {
+        id
+        name
+      }
     }
   }
 `;

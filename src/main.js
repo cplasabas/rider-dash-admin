@@ -19,10 +19,21 @@ import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css";
 import "./theme/style.scss";
 
+import * as VueGoogleMaps from "vue2-google-maps";
+import { rtdbPlugin } from "vuefire";
+
 import moment from "vue-moment";
 import VueCurrencyFilter from "vue-currency-filter";
 
 import Truncate from "lodash.truncate";
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyDO-UOIDzbh8SGncTMZ8z45OU30Y7X70o0"
+  }
+});
+
+Vue.use(rtdbPlugin);
 
 Vue.filter("truncate", Truncate);
 Vue.use(moment);
