@@ -67,13 +67,13 @@ Vue.use(Vuetify, {
 });
 
 const httpLink = new HttpLink({
-  // uri: "https://api.homegrownmart.com",
-  uri: "http://localhost:8010"
+  uri: "https://api.riderdash.ph"
+  // uri: "http://localhost:8010"
 });
 
 const wsLink = new WebSocketLink({
-  // uri: "ws://api.homegrownmart.com/graphql",
-  uri: "ws:localhost:8010/graphql",
+  uri: "ws://api.riderdash.ph/graphql",
+  // uri: "ws:localhost:8010/graphql",
   options: {
     reconnect: true,
     connectionParams: {
