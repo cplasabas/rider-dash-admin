@@ -251,7 +251,7 @@ export default {
           updateQuery: (previousResult, { subscriptionData }) => {
             window.getApp.snackbar = {
               show: true,
-              color: "green",
+              color: "primary",
               text:
                 "Order #" + subscriptionData.data.orderUpdated.id + " Updated."
             };
@@ -262,7 +262,7 @@ export default {
           updateQuery: (previousResult, { subscriptionData }) => {
             window.getApp.snackbar = {
               show: true,
-              color: "green",
+              color: "primary",
               text: "New Order Created."
             };
 

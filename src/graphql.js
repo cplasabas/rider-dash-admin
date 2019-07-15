@@ -82,7 +82,9 @@ export const ridersQuery = gql`
     riders {
       id
       first_name
+      middle_name
       last_name
+      phone
       current_order {
         id
         status {
@@ -114,6 +116,32 @@ export const updateOrderMutation = gql`
         id
         name
       }
+    }
+  }
+`;
+
+export const createRider = gql`
+  mutation createRider(
+    $first_name: String!
+    $middle_name: String
+    $last_name: String!
+    $ride_make: String
+    $ride_model: String
+    $phone: String!
+  ) {
+    createRider(
+      first_name: $first_name
+      middle_name: $middle_name
+      last_name: $last_name
+      ride_make: $ride_make
+      ride_model: $ride_model
+      phone: $phone
+    ) {
+      id
+      first_name
+      middle_name
+      last_name
+      phone
     }
   }
 `;
