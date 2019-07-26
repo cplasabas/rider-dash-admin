@@ -40,10 +40,7 @@
     </v-layout>
     <v-layout my-3 justify-end>
       <v-flex md2 xs2>
-        <v-btn
-          color="primary"
-          @click="view_add_rider"
-        >
+        <v-btn color="primary" @click="view_add_rider">
           Create Rider
           <v-icon>add</v-icon>
         </v-btn>
@@ -76,29 +73,39 @@
                 <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
                 <td>{{ props.item.phone }}</td>
                 <td class="text-xs-center">
-                <v-tooltip bottom>
-                  <v-btn
-                    slot="activator"
-                    color="light-green darken-4"
-                    depressed outline icon fab dark small
-                    @click="view_edit(props.item.id)"
-                  >
-                    <v-icon>edit</v-icon>
-                  </v-btn>
-                  <span>Edit</span>
-                </v-tooltip>
-                <v-tooltip bottom>
-                  <v-btn
-                    slot="activator"
-                    color="red darken-1"
-                    depressed outline icon fab dark small
-                    @click="view_delete(props.item.id)"
-                  >
-                    <v-icon>delete</v-icon>
-                  </v-btn>
-                  <span>Delete</span>
-                </v-tooltip>
-              </td>
+                  <v-tooltip bottom>
+                    <v-btn
+                      slot="activator"
+                      color="light-green darken-4"
+                      depressed
+                      outline
+                      icon
+                      fab
+                      dark
+                      small
+                      @click="view_edit(props.item.id)"
+                    >
+                      <v-icon>edit</v-icon>
+                    </v-btn>
+                    <span>Edit</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <v-btn
+                      slot="activator"
+                      color="red darken-1"
+                      depressed
+                      outline
+                      icon
+                      fab
+                      dark
+                      small
+                      @click="view_delete(props.item.id)"
+                    >
+                      <v-icon>delete</v-icon>
+                    </v-btn>
+                    <span>Delete</span>
+                  </v-tooltip>
+                </td>
               </template>
               <template v-slot:no-results>
                 <v-alert :value="true" color="error" icon="warning">
@@ -110,27 +117,16 @@
         </template>
       </v-flex>
     </v-layout>
-    <v-dialog
-      v-model="dialog.add_rider"
-      width="800"
-    >
+    <v-dialog v-model="dialog.add_rider" width="800">
       <v-card>
-        <v-card-title
-          class="headline secondary white--text"
-          primary-title
-        >
+        <v-card-title class="headline secondary white--text" primary-title>
           Add Rider
         </v-card-title>
-
         <v-card-text>
           <v-form v-model="rider_form_valid">
             <v-container>
               <v-layout row wrap>
-                <v-flex
-                  xs12
-                  sm6
-                  md6
-                >
+                <v-flex xs12 sm6 md6>
                   <v-text-field
                     prepend-icon="person"
                     v-model="rider.first_name"
@@ -140,23 +136,14 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex
-                  xs12
-                  sm6
-                  md6
-                >
+                <v-flex xs12 sm6 md6>
                   <v-text-field
                     prepend-icon="person"
                     v-model="rider.middle_name"
                     label="Middle name"
                   ></v-text-field>
                 </v-flex>
-
-                <v-flex
-                  xs12
-                  sm6
-                  md6
-                >
+                <v-flex xs12 sm6md6>
                   <v-text-field
                     prepend-icon="person"
                     v-model="rider.last_name"
@@ -165,19 +152,15 @@
                     required
                   ></v-text-field>
                 </v-flex>
-                <v-flex
-                  xs12
-                  sm6
-                  md6
-                >
-                <v-text-field
-                  prepend-icon="phone"
-                  prefix="+63"
-                  v-model="rider.phone" 
-                  mask="####-###-####"
-                  :rules="[rules.required]"
-                  required
-                ></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field
+                    prepend-icon="phone"
+                    prefix="+63"
+                    v-model="rider.phone"
+                    mask="####-###-####"
+                    :rules="[rules.required]"
+                    required
+                  ></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -188,11 +171,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            flat
-            @click="dialog.add_rider = false"
-          >
+          <v-btn color="primary" flat @click="dialog.add_rider = false">
             Close
           </v-btn>
           <v-btn
@@ -211,10 +190,7 @@
 
 <script>
 import { firebase_db } from "../firebase";
-import {
-  ridersQuery,
-  createRider
-} from "@/graphql";
+import { ridersQuery, createRider } from "@/graphql";
 // import GmapCustomMarker from "vue2-gmap-custom-marker";
 
 export default {
@@ -225,12 +201,12 @@ export default {
     riders: {
       query: ridersQuery,
       manual: true,
-      result ({ data, loading }) {
+      result({ data, loading }) {
         if (!loading) {
-          this.rider_list.items = data.riders
+          this.rider_list.items = data.riders;
         }
       }
-    },
+    }
   },
   data: () => ({
     mapStyle: {
@@ -315,15 +291,15 @@ export default {
         }
       ]
     },
-    search: '',
+    search: "",
     rider_list: {
       headers: [
-        { text: 'Name', value: 'first_name' },
-        { text: 'Phone', value: 'phone' },
+        { text: "Name", value: "first_name" },
+        { text: "Phone", value: "phone" },
         {
-          text: 'Actions',
-          value: 'actions',
-          align: 'center'
+          text: "Actions",
+          value: "actions",
+          align: "center"
         }
       ],
       items: []
@@ -352,70 +328,72 @@ export default {
       phone: null
     },
     rules: {
-      required: value => !!value || 'Required.',
-      email: v => /.+@.+/.test(v) || 'E-mail must be valid'
-    },
+      required: value => !!value || "Required.",
+      email: v => /.+@.+/.test(v) || "E-mail must be valid"
+    }
   }),
   firebase: {
     riders: firebase_db.ref("riders")
   },
   methods: {
-    view_edit_rider(id) {
+    // view_edit_rider(id) {
 
-    },
-    view_delete_rider(id) {
+    // },
+    // view_delete_rider(id) {
 
-    },
-    view_add_rider () {
+    // },
+    view_add_rider() {
       this.dialog.add_rider = true;
     },
-    add_rider () {
+    add_rider() {
       this.loading = true;
-      const newRider = this.rider
+      const newRider = this.rider;
 
-      this.$apollo.mutate({
-        mutation: createRider,
-        variables: newRider,
-        update: (store, { data } ) => {
-          const riders = store.readQuery({ query: ridersQuery })
+      this.$apollo
+        .mutate({
+          mutation: createRider,
+          variables: newRider,
+          update: (store, { data }) => {
+            const riders = store.readQuery({ query: ridersQuery });
 
-          riders.riders.push(data.createRider)
+            riders.riders.push(data.createRider);
 
-          store.writeQuery({ query: ridersQuery, data })
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          rider: {
-            __typename: 'Rider',
-            id: -1,
-            first_name: newRider.first_name,
-            middle_name: newRider.middle_name,
-            last_name: newRider.last_name,
+            store.writeQuery({ query: ridersQuery, data });
           },
-        },
-      }).then(() => {
-        this.loading = false;
-        this.dialog.add_rider = false;
+          optimisticResponse: {
+            __typename: "Mutation",
+            rider: {
+              __typename: "Rider",
+              id: -1,
+              first_name: newRider.first_name,
+              middle_name: newRider.middle_name,
+              last_name: newRider.last_name
+            }
+          }
+        })
+        .then(() => {
+          this.loading = false;
+          this.dialog.add_rider = false;
 
-        window.getApp.snackbar = {
-          show: true,
-          color: "primary",
-          text: "Rider Created."
-        };
+          window.getApp.snackbar = {
+            show: true,
+            color: "primary",
+            text: "Rider Created."
+          };
+        })
+        .catch(error => {
+          this.loading = false;
+          this.dialog.add_rider = false;
 
-      }).catch((error) => {
-        this.loading = false;
-        this.dialog.add_rider = false;
+          window.getApp.snackbar = {
+            show: true,
+            color: "red darken-4",
+            text: "Failed!."
+          };
 
-        window.getApp.snackbar = {
-          show: true,
-          color: "red darken-4",
-          text: "Failed!."
-        };
-
-        console.error(error)
-        this.rider = newRider
-      })
+          console.error(error);
+          this.rider = newRider;
+        });
     },
     toggleInfoWindow(marker, idx) {
       this.infoWindowPos = this.getPosition(marker);
