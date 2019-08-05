@@ -29,7 +29,7 @@ import Truncate from "lodash.truncate";
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyDO-UOIDzbh8SGncTMZ8z45OU30Y7X70o0"
+    key: "AIzaSyBrut1TgmgMpul0RfA6h3Ryx3OoDodh_YA"
   }
 });
 

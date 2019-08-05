@@ -1,5 +1,5 @@
 <template>
-  <v-container class="riders-container">
+  <v-container fluid class="riders-container">
     <v-layout my-2>
       <p class="display-2 font-weight-bold">Riders</p>
     </v-layout>
@@ -32,7 +32,6 @@
             :key="index"
             v-for="(r, index) in riders"
             :position="getPosition(r)"
-            :label="index"
             @click="toggleInfoWindow(r, index)"
           />
         </GmapMap>

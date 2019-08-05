@@ -65,13 +65,24 @@ export const orderUpdatedSubscription = gql`
   subscription {
     orderUpdated {
       id
-      status {
-        id
-        name
-      }
       rider {
         first_name
         last_name
+      }
+      contact_name
+      contact_phone
+      service_fee
+      notes
+      locations {
+        id
+        address
+        establishment
+      }
+      createdAt
+      status_id
+      status {
+        id
+        name
       }
     }
   }
@@ -91,6 +102,9 @@ export const ridersQuery = gql`
           id
           name
         }
+        current_location {
+          establishment
+        }
       }
     }
   }
@@ -99,12 +113,37 @@ export const ridersQuery = gql`
 export const riderAssignedSubscription = gql`
   subscription {
     riderAssigned {
+      id
       status {
         id
         name
       }
-      id
       rider_id
+      current_location {
+        establishment
+      }
+    }
+  }
+`;
+
+export const riderOrderUpdatedSubscription = gql`
+  subscription {
+    riderOrderUpdated {
+      id
+      first_name
+      middle_name
+      last_name
+      phone
+      current_order {
+        id
+        status {
+          id
+          name
+        }
+        current_location {
+          establishment
+        }
+      }
     }
   }
 `;
@@ -115,6 +154,9 @@ export const updateOrderMutation = gql`
       status {
         id
         name
+      }
+      current_location {
+        establishment
       }
     }
   }

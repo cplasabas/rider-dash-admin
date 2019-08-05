@@ -1,6 +1,6 @@
 <template>
-  <v-container class="dashboard-container">
-    <v-layout class="orders-container" row wrap>
+  <v-layout>
+    <v-layout v-if="ongoingOrders.length > 0" class="orders-container" row wrap>
       <v-flex
         xs12
         md4
@@ -130,6 +130,19 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-layout v-else>
+      <v-container fill-height text-xs-center>
+        <v-layout row wrap align-center>
+          <v-flex>
+            <p
+              class="display-2 text-uppercase font-weight-bold grey--text text--lighten-1"
+            >
+              NO ORDERS
+            </p>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-layout>
     <v-bottom-nav
       :value="show_riders"
       fixed
@@ -139,7 +152,7 @@
     >
       <VuePerfectScrollbar class="scroll-area">
         <v-layout class="non-clickable" row wrap justify-end>
-          <v-flex md3 xs6 px-2 py-2 v-for="(rider, key) in riders" :key="key">
+          <v-flex md3 xs12 px-2 py-2 v-for="(rider, key) in riders" :key="key">
             <!-- eslint-disable -->
             <v-card
               class="rider-card"
@@ -160,13 +173,13 @@
                       md7
                       sm7
                       text-xs-right
-                      v-if="rider.current_order"
+                      v-if="rider.current_order && rider.current_order.current_location"
                     >
                       <!-- eslint-disable -->
                       <h3
                         class="primary--text text-capitalize text--lighten-1"
                       >
-                        {{rider.current_order.status.name}}
+                        {{rider.current_order.status.name}} {{rider.current_order.current_location.establishment}}
                       </h3>
                     </v-flex>
                     <v-flex
@@ -180,7 +193,7 @@
                         class="secondary--text
                         text--lighten-4"
                       >
-                        Ready
+                        No Current Order
                       </h3>
                     </v-flex>
                   </v-layout>
@@ -222,7 +235,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </v-container>
+  </v-layout>
 </template>
 
 <script>
@@ -232,6 +245,7 @@ import {
   orderUpdatedSubscription,
   ridersQuery,
   riderAssignedSubscription,
+  riderOrderUpdatedSubscription,
   updateOrderMutation
 } from "@/graphql";
 import moment from "moment";
@@ -278,21 +292,36 @@ export default {
     },
     riders: {
       query: ridersQuery,
-      subscribeToMore: {
-        document: riderAssignedSubscription,
-        updateQuery: (previousResult, { subscriptionData }) => {
-          let data = subscriptionData.data.riderAssigned;
-          previousResult.riders.map(rider => {
-            if (rider.id === data.rider_id) {
-              rider.current_order = {
-                status: data.status,
-                id: data.id
-              };
-            }
-            return rider;
-          });
+      subscribeToMore: [
+        {
+          document: riderOrderUpdatedSubscription,
+          updateQuery: (previousResult, { subscriptionData }) => {
+
+            let data = subscriptionData.data.riderOrderUpdated;
+            previousResult.riders.map(rider => {
+              if (rider.id === data.rider_id) {
+                rider.current_order = data.current_order;
+              }
+              return rider;
+            });
+          }
+        },
+        {
+          document: riderAssignedSubscription,
+          updateQuery: (previousResult, { subscriptionData }) => {
+            let data = subscriptionData.data.riderAssigned;
+            previousResult.riders.map(rider => {
+              if (rider.id === data.rider_id) {
+                rider.current_order = {
+                  status: data.status,
+                  id: data.id
+                };
+              }
+              return rider;
+            });
+          }
         }
-      }
+      ]
     }
   },
   data: () => ({
@@ -326,7 +355,7 @@ export default {
   computed: {
     ongoingOrders: function() {
       return this.orders.filter(function(o) {
-        return o.status !== 6 && o.status !== 7;
+        return o.status !== 5 && o.status !== 6;
       });
     },
     availableRiders: function() {
