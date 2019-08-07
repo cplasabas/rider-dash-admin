@@ -68,7 +68,8 @@ export default {
           mutation: loginMutation,
           variables: {
             username: this.username,
-            password: this.password
+            password: this.password,
+            type: 1
           }
         })
         .then(response => {
