@@ -8,7 +8,7 @@ export const loginMutation = gql`
   }
 `;
 
-export const ordersQuery = gql`
+export const ongoingOrdersQuery = gql`
   query {
     orders(ongoing: true) {
       id
@@ -24,6 +24,38 @@ export const ordersQuery = gql`
         address
         establishment
       }
+      createdAt
+      status_id
+      status {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const ordersQuery = gql`
+  query {
+    orders {
+      id
+      rider {
+        first_name
+        last_name
+      }
+      customer {
+        first_name
+        last_name
+      }
+      contact_name
+      contact_phone
+      service_fee
+      notes
+      locations {
+        address
+        establishment
+      }
+      total
+      order_date
       createdAt
       status_id
       status {
@@ -109,6 +141,22 @@ export const ridersQuery = gql`
     }
   }
 `;
+
+export const settingsQuery = gql`
+  query {
+    settings {
+      key
+      value
+    }
+  }
+`;
+
+export const saveSettingsMutation = gql`
+  mutation saveSettings($settings: [SettingInput!]!) {
+    saveSettings(settings: $settings)
+  }
+`;
+
 
 export const riderAssignedSubscription = gql`
   subscription {

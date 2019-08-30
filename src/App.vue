@@ -42,7 +42,7 @@
       </v-container>
     </div>
     <v-snackbar
-      :timeout="0"
+      :timeout="3000"
       top
       right
       :color="snackbar.color"

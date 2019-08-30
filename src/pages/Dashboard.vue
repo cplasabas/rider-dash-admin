@@ -102,7 +102,7 @@
                       dark
                       v-on="on"
                       color="red darken-4"
-                      @click="reject_order()"
+                      @click="show_reject(order.id)"
                     >
                       Reject
                     </v-btn>
@@ -223,6 +223,23 @@
         </v-layout>
       </VuePerfectScrollbar>
     </v-bottom-nav>
+    <v-dialog v-model="dialog.reject" width="500">
+      <v-card>
+        <v-card-title class="title secondary white--text" primary-title>
+          Reject Order
+        </v-card-title>
+        <v-card-text>
+          <v-layout row wrap>
+            Are you sure you want to reject the order?
+          </v-layout>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="secondary" flat @click="dialog.reject = false">Close</v-btn>
+          <v-btn color="red" flat @click="reject_order()">Reject</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog.order" width="500">
       <v-card>
         <v-card-title class="title secondary white--text" primary-title>
@@ -240,7 +257,7 @@
 
 <script>
 import {
-  ordersQuery,
+  ongoingOrdersQuery,
   orderCreatedSubscription,
   orderUpdatedSubscription,
   ridersQuery,
@@ -258,7 +275,7 @@ export default {
   },
   apollo: {
     orders: {
-      query: ordersQuery,
+      query: ongoingOrdersQuery,
       subscribeToMore: [
         {
           document: orderUpdatedSubscription,
@@ -329,7 +346,8 @@ export default {
     orders: [],
     riders: [],
     dialog: {
-      order: false
+      order: false,
+      reject: false
     },
     order: {
       id: null,
@@ -355,7 +373,7 @@ export default {
   computed: {
     ongoingOrders: function() {
       return this.orders.filter(function(o) {
-        return o.status !== 5 && o.status !== 6;
+        return o.status_id !== 5 && o.status_id !== 6 && o.status_id !== 7;
       });
     },
     availableRiders: function() {
@@ -375,6 +393,46 @@ export default {
     }
   },
   methods: {
+    show_reject (order_id) {
+      this.reject_id = order_id;
+      this.dialog.reject = true;
+    },
+    async reject_order () {
+      let payload = {
+        id: this.reject_id,
+        status_id: 7
+      };
+      
+      await this.$apollo
+          .mutate({
+            mutation: updateOrderMutation,
+            variables: payload
+          })
+          .then(() => {
+            this.loading = false;
+            this.dialog.reject = false;
+
+            window.getApp.snackbar = {
+              show: true,
+              color: "red darken-1",
+              text: "Order Rejected"
+            };
+          })
+          .catch(({ graphQLErrors }) => {
+            this.loading = false;
+            this.dialog.reject = false;
+            
+            if (graphQLErrors) {
+              this.error = graphQLErrors[0].message;
+
+              window.getApp.snackbar = {
+                show: true,
+                color: "red darken-1",
+                text: "Rider Assignment Error"
+              };
+            }
+          });
+    },
     show_order(order_id) {
       this.order.id = order_id;
       this.dialog.order = true;

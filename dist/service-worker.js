@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.b44c7d68996c6188495c3dad0cb8c578.js"
+  "/precache-manifest.3e876f6e2c1eff9808694b8a2afa1349.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "rider-dash-admin"});

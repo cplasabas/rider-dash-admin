@@ -40,5 +40,16 @@ export default [
     },
     name: "Riders",
     component: () => import("@/pages/Riders.vue")
+  },
+  {
+    path: "/settings",
+    icon: "settings",
+    meta: {
+      breadcrumb: true,
+      requiresAuth: true,
+      menu: true
+    },
+    name: "Settings",
+    component: () => import("@/pages/Settings.vue")
   }
 ];
