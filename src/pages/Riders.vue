@@ -30,7 +30,7 @@
           </gmap-info-window>
           <GmapMarker
             :key="index"
-            v-for="(r, index) in riders"
+            v-for="(r, index) in activeRiders"
             :position="getPosition(r)"
             @click="toggleInfoWindow(r, index)"
           />
@@ -71,7 +71,42 @@
               <template v-slot:items="props">
                 <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
                 <td>{{ props.item.phone }}</td>
+                <td v-if="props.item.active">Active</td>
+                <td v-else>Inactive</td>
+
                 <td class="text-xs-center">
+                  <v-tooltip bottom v-if="!props.item.active">
+                    <v-btn
+                      slot="activator"
+                      color="light-green darken-4"
+                      depressed
+                      outline
+                      icon
+                      fab
+                      dark
+                      small
+                      @click="view_activate(props.item.id)"
+                    >
+                      <v-icon>check</v-icon>
+                    </v-btn>
+                    <span>Activate</span>
+                  </v-tooltip>
+                  <v-tooltip bottom v-else>
+                    <v-btn
+                      slot="activator"
+                      color="red darken-4"
+                      depressed
+                      outline
+                      icon
+                      fab
+                      dark
+                      small
+                      @click="view_deactivate(props.item.id)"
+                    >
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                    <span>Deactivate</span>
+                  </v-tooltip>
                   <v-tooltip bottom>
                     <v-btn
                       slot="activator"
@@ -116,6 +151,40 @@
         </template>
       </v-flex>
     </v-layout>
+    <v-dialog v-model="dialog.activate_rider" width="800">
+      <v-card>
+        <v-card-title class="headline secondary white--text" primary-title>
+          Activate Rider?
+        </v-card-title>
+        <v-card-text>
+          <v-layout row wrap class="text-xs-center">
+            <v-flex xs12 md12>
+              Do you want to activate Rider?
+            </v-flex>
+            <v-flex xs12 md12>
+              <v-btn @click="updateRider(1)" dark color="light-green darken-4">Activate</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialog.deactivate_rider" width="800">
+      <v-card>
+        <v-card-title class="headline secondary white--text" primary-title>
+          Deactivate Rider?
+        </v-card-title>
+        <v-card-text>
+          <v-layout row wrap class="text-xs-center">
+            <v-flex xs12 md12>
+              Do you want to deactivate Rider?
+            </v-flex>
+            <v-flex xs12 md12>
+              <v-btn @click="updateRider(2)" dark color="red darken-4">Deactivate</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog.add_rider" width="800">
       <v-card>
         <v-card-title class="headline secondary white--text" primary-title>
@@ -189,7 +258,7 @@
 
 <script>
 import { firebase_db } from "../firebase";
-import { ridersQuery, createRider } from "@/graphql";
+import { ridersQuery, createRider, updateRiderMutation, riderUpdatedSubscription } from "@/graphql";
 // import GmapCustomMarker from "vue2-gmap-custom-marker";
 
 export default {
@@ -203,6 +272,12 @@ export default {
       result({ data, loading }) {
         if (!loading) {
           this.rider_list.items = data.riders;
+        }
+      },
+       subscribeToMore:{
+        document: riderUpdatedSubscription,
+        updateQuery: (previousResult, { subscriptionData }) => {
+
         }
       }
     }
@@ -295,6 +370,7 @@ export default {
       headers: [
         { text: "Name", value: "first_name" },
         { text: "Phone", value: "phone" },
+        { text: "Status", value: "active" },
         {
           text: "Actions",
           value: "actions",
@@ -317,7 +393,9 @@ export default {
       }
     },
     dialog: {
-      add_rider: false
+      add_rider: false,
+      activate_rider: false,
+      deactivate_rider: false
     },
     rider_form_valid: false,
     rider: {
@@ -326,6 +404,7 @@ export default {
       last_name: "",
       phone: null
     },
+    edit_id: null,
     rules: {
       required: value => !!value || "Required.",
       email: v => /.+@.+/.test(v) || "E-mail must be valid"
@@ -334,7 +413,75 @@ export default {
   firebase: {
     riders: firebase_db.ref("riders")
   },
+  computed: {
+    activeRiders: function () {
+      let active_riders = this.riders.filter(r => {
+        let rider_id = r.rider_id;
+
+        let rider_data = this.rider_list.items.find(r => r.id = rider_id);
+
+        return rider_data.active;
+      })
+
+      return active_riders;  
+    }
+  },
   methods: {
+    async updateRider (type) {
+      let active = false;
+
+      if (type === 1) {
+        active = true;
+      } else if (type === 2) {
+        active = false;
+      } else if (type === 3)  {
+
+      }
+      
+      if ( type !== 3) {
+        await this.$apollo
+        .mutate({
+          mutation: updateRiderMutation,
+          variables: {
+            id: this.edit_id,
+            active: active
+          }
+        })
+        .then(response => {
+          window.getApp.snackbar = {
+            show: true,
+            color: "green darken-1",
+            text: "Update Success"
+          };
+
+          this.dialog.activate_rider = false;
+          this.dialog.deactivate_rider = false;
+        })
+        .catch(({ graphQLErrors }) => {
+          this.loading = false;
+          if (graphQLErrors) {
+            this.error = graphQLErrors[0].message;
+
+            window.getApp.snackbar = {
+              show: true,
+              color: "red darken-1",
+              text: "Update Error"
+            };
+
+            this.dialog.activate_rider = false;
+            this.dialog.deactivate_rider = false;
+          }
+        });
+      }
+    },
+    view_activate(id) {
+      this.edit_id = id;
+      this.dialog.activate_rider = true;
+    },
+    view_deactivate (id) {
+      this.edit_id = id;
+      this.dialog.deactivate_rider = true;
+    },
     // view_edit_rider(id) {
 
     // },

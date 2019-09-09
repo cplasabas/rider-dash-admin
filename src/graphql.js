@@ -128,6 +128,7 @@ export const ridersQuery = gql`
       middle_name
       last_name
       phone
+      active
       current_order {
         id
         status {
@@ -138,6 +139,38 @@ export const ridersQuery = gql`
           establishment
         }
       }
+    }
+  }
+`;
+
+
+export const riderUpdatedSubscription = gql`
+  subscription {
+    riderUpdated {
+      id
+      first_name
+      middle_name
+      last_name
+      phone
+      active
+      current_order {
+        id
+        status {
+          id
+          name
+        }
+        current_location {
+          establishment
+        }
+      }
+    }
+  }
+`;
+
+export const updateRiderMutation = gql`
+  mutation updateRiderMutation($id: ID!, $active: Boolean){
+    updateRider (id: $id, active: $active) {
+      id
     }
   }
 `;
