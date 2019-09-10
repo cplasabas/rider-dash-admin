@@ -123,22 +123,7 @@
                     </v-btn>
                     <span>Edit</span>
                   </v-tooltip>
-                  <v-tooltip bottom>
-                    <v-btn
-                      slot="activator"
-                      color="red darken-1"
-                      depressed
-                      outline
-                      icon
-                      fab
-                      dark
-                      small
-                      @click="view_delete(props.item.id)"
-                    >
-                      <v-icon>delete</v-icon>
-                    </v-btn>
-                    <span>Delete</span>
-                  </v-tooltip>
+                 
                 </td>
               </template>
               <template v-slot:no-results>
@@ -272,6 +257,8 @@ export default {
       result({ data, loading }) {
         if (!loading) {
           this.rider_list.items = data.riders;
+          console.log(this.rider_list.items);
+          
         }
       },
        subscribeToMore:{
@@ -418,9 +405,11 @@ export default {
       let active_riders = this.riders.filter(r => {
         let rider_id = r.rider_id;
 
-        let rider_data = this.rider_list.items.find(r => r.id = rider_id);
+        let rider_data = this.rider_list.items.find(r => r.id == rider_id);
 
-        return rider_data.active;
+        if (rider_data) return rider_data.active;
+
+        return false;
       })
 
       return active_riders;  
