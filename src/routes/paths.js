@@ -42,6 +42,17 @@ export default [
     component: () => import("@/pages/Riders.vue")
   },
   {
+    path: "/coupons",
+    icon: "local_offer",
+    meta: {
+      breadcrumb: true,
+      requiresAuth: true,
+      menu: true
+    },
+    name: "Coupons",
+    component: () => import("@/pages/Coupons.vue")
+  },
+  {
     path: "/settings",
     icon: "settings",
     meta: {

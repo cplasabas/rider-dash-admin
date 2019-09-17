@@ -65,6 +65,50 @@ export const ordersQuery = gql`
     }
   }
 `;
+export const couponsQuery = gql`
+  query {
+    coupons {
+      id
+      code
+      name
+      type
+      amount
+      active
+    }
+  }
+`;
+
+export const createCouponMutation = gql`
+  mutation createCoupon($name: String!, $code: String!, $type: Int!, $amount: Float!){
+    createCoupon(name: $name, code: $code, type: $type, amount: $amount) {
+        id
+        code
+        name
+        type
+        amount
+        active
+    }
+  }
+`;
+
+export const updateCouponMutation = gql`
+  mutation updateCoupon($id: ID!, $name: String, $code: String, $type: Int, $amount: Float, $active: Boolean){
+    updateCoupon(id: $id, name: $name, code: $code, type: $type, amount: $amount, active: $active) {
+        id
+        code
+        name
+        type
+        amount
+        active
+    }
+  }
+`;
+
+export const deleteCouponMutation = gql`
+  mutation deleteCoupon($id: ID!){
+    deleteCoupon(id: $id)
+  }
+`;
 
 export const orderCreatedSubscription = gql`
   subscription {
