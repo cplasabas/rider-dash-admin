@@ -8,17 +8,33 @@
             </v-card-title>
             <v-card-text>
                 <v-layout row wrap>
+                    <v-flex x12 md12 class="display-1 font-weight-bold">Errand Rates</v-flex>
                     <v-flex class="md1 xs6">
-                        <v-text-field prefix="₱" label="Base Rate" type="number" v-model="base_rate"></v-text-field>
+                        <v-text-field prefix="₱" label="Base Rate" type="number" v-model="base_rate_e"></v-text-field>
                     </v-flex>
                     <v-flex class="md1 xs6">
-                        <v-text-field label="Base Km" suffix="km" type="number" v-model="base_km"></v-text-field>
+                        <v-text-field label="Base Km" suffix="km" type="number" v-model="base_km_e"></v-text-field>
                     </v-flex>
                     <v-flex class="md1 xs6">
-                        <v-text-field prefix="₱" label="Per Km" type="number" v-model="per_km"></v-text-field>
+                        <v-text-field prefix="₱" label="Per Km" type="number" v-model="per_km_e"></v-text-field>
                     </v-flex>
                     <v-flex class="md1 xs6">
-                        <v-text-field prefix="₱" label="Per Location" type="number" v-model="per_location"></v-text-field>
+                        <v-text-field prefix="₱" label="Per Location" type="number" v-model="per_location_e"></v-text-field>
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap>
+                    <v-flex x12 md12 class="display-1 font-weight-bold">Food Rates</v-flex>
+                    <v-flex class="md1 xs6">
+                        <v-text-field prefix="₱" label="Base Rate" type="number" v-model="base_rate_f"></v-text-field>
+                    </v-flex>
+                    <v-flex class="md1 xs6">
+                        <v-text-field label="Base Km" suffix="km" type="number" v-model="base_km_f"></v-text-field>
+                    </v-flex>
+                    <v-flex class="md1 xs6">
+                        <v-text-field prefix="₱" label="Per Km" type="number" v-model="per_km_f"></v-text-field>
+                    </v-flex>
+                    <v-flex class="md1 xs6">
+                        <v-text-field prefix="₱" label="Per Location" type="number" v-model="per_location_f"></v-text-field>
                     </v-flex>
                 </v-layout>
             </v-card-text>
@@ -47,20 +63,36 @@ export default {
         result ({ data, loading, networkStatus }) {
             if (!loading) {
                 data.settings.filter(setting => { 
-                    if (setting.key === "base_rate" ) {
-                        this.base_rate = parseFloat(setting.value)
+                    if (setting.key === "base_rate_e" ) {
+                        this.base_rate_e = parseFloat(setting.value)
                     }
 
-                    if (setting.key === "base_km" ) {
-                        this.base_km = parseInt(setting.value)
+                    if (setting.key === "base_km_e" ) {
+                        this.base_km_e = parseInt(setting.value)
                     }
 
-                    if (setting.key === "per_km" ) {
-                        this.per_km = parseFloat(setting.value)
+                    if (setting.key === "per_km_e" ) {
+                        this.per_km_e = parseFloat(setting.value)
                     }
 
-                    if (setting.key === "per_location" ) {
-                        this.per_location = parseFloat(setting.value)
+                    if (setting.key === "per_location_e" ) {
+                        this.per_location_e = parseFloat(setting.value)
+                    }
+
+                    if (setting.key === "base_rate_f" ) {
+                        this.base_rate_f = parseFloat(setting.value)
+                    }
+
+                    if (setting.key === "base_km_f" ) {
+                        this.base_km_f = parseInt(setting.value)
+                    }
+
+                    if (setting.key === "per_km_f" ) {
+                        this.per_km_f = parseFloat(setting.value)
+                    }
+
+                    if (setting.key === "per_location_f" ) {
+                        this.per_location_f = parseFloat(setting.value)
                     }
                 })
                 
@@ -70,30 +102,50 @@ export default {
   },
   data: () => ({
     loading: false,
-    base_rate: 0,
-    base_km: 0,
-    per_km: 0,
-    per_location: 0
+    base_rate_e: 0,
+    base_km_e: 0,
+    per_km_e: 0,
+    per_location_e: 0,
+    base_rate_f: 0,
+    base_km_f: 0,
+    per_km_f: 0,
+    per_location_f: 0
   }),
 
   methods: {
     async save_settings() {
         let settings = [
             {
-                key: "base_rate",
-                value: this.base_rate.toString()
+                key: "base_rate_e",
+                value: this.base_rate_e.toString()
             },
             {
-                key: "base_km",
-                value: this.base_km.toString()
+                key: "base_km_e",
+                value: this.base_km_e.toString()
             },
             {
-                key: "per_km",
-                value: this.per_km.toString()
+                key: "per_km_e",
+                value: this.per_km_e.toString()
             },
             {
-                key: "per_location",
-                value: this.per_location.toString()
+                key: "per_location_e",
+                value: this.per_location_e.toString()
+            },
+            {
+                key: "base_rate_f",
+                value: this.base_rate_f.toString()
+            },
+            {
+                key: "base_km_f",
+                value: this.base_km_f.toString()
+            },
+            {
+                key: "per_km_f",
+                value: this.per_km_f.toString()
+            },
+            {
+                key: "per_location_f",
+                value: this.per_location_f.toString()
             }
         ];
 
