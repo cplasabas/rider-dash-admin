@@ -92,7 +92,6 @@
           <v-card-actions
             v-on:click.stop
             class="secondary"
-            v-show="order.status.id === 1"
           >
             <v-layout row wrap my-1 text-capitalize justify-end>
               <v-flex class="text-xs-right" md3 sm3>
@@ -110,8 +109,8 @@
                   <span>Reject Order</span>
                 </v-tooltip>
               </v-flex>
-              <v-flex class="text-xs-right" md3 sm3>
-                <v-tooltip bottom>
+              <v-flex class="text-xs-right" md4 sm4>
+                <v-tooltip bottom v-if="order.status.id === 1">
                   <template v-slot:activator="{ on }">
                     <v-btn
                       dark
@@ -123,6 +122,19 @@
                     </v-btn>
                   </template>
                   <span>Assign Rider to Order</span>
+                </v-tooltip>
+                <v-tooltip bottom v-else-if="order.status.id > 1">
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      dark
+                      v-on="on"
+                      color="primary"
+                      @click="order_assign(order.id)"
+                    >
+                      Reassign
+                    </v-btn>
+                  </template>
+                  <span>Reassign Order to another Rider</span>
                 </v-tooltip>
               </v-flex>
             </v-layout>
